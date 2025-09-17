@@ -1,7 +1,22 @@
 name: Test and deploy react app
 on: [push, workflow_dispatch]
 jobs:
+  lint-react-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v5
+      - name: Install NodeJS
+        uses: actions/setup-node@v5
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm cli
+      - name: Lint react app
+        run: npm run lint
+      
   test-react-app:
+    needs: lint-react-app
     runs-on: ubuntu-latest
     steps:
       - name: Get code
