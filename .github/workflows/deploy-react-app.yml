@@ -11,7 +11,7 @@ jobs:
         with:
           node-version: 18
       - name: Install dependencies
-        run: npm cli
+        run: npm ci
       - name: Lint react app
         run: npm run lint
       
