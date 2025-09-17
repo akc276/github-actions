@@ -13,7 +13,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Lint react app
-        run: npm run lint
+        run: npm lint
       
   test-react-app:
     needs: lint-react-app
