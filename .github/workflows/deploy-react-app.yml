@@ -52,12 +52,11 @@ jobs:
         with:
           node-version: 18
       - name: Install dependenceis
-        run: |
-          pwd
-          npm ci
+        run: npm ci
       - name: Build project
         run: |
           pwd
+          ls -alsh
           npm run build
       - name: Publish JS file name in job output
         id: publish
@@ -84,5 +83,7 @@ jobs:
           pwd
           ls -alsh
           du -sh *
+      - name: Output files
+        run: echo "${{ needs.build-react-app.outputs.script-file }}"
       - name: Deploy build
         run: echo "Deploying ..."
