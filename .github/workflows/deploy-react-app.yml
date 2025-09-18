@@ -50,9 +50,13 @@ jobs:
         with:
           node-version: 18
       - name: Install dependenceis
-        run: npm ci
+        run: |
+          pwd
+          npm ci
       - name: Build project
-        run: npm run build
+        run: |
+          pwd
+          npm run build
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -71,6 +75,7 @@ jobs:
           name: dist-files
       - name: Output contents
         run: |
+          pwd
           ls -alsh
           du -sh *
       - name: Deploy build
