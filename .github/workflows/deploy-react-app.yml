@@ -42,6 +42,8 @@ jobs:
   build-react-app:
     needs: test-react-app
     runs-on: ubuntu-latest
+    outputs:
+      script-file: hello
     steps:
       - name: Get code
         uses: actions/checkout@v5
@@ -57,6 +59,10 @@ jobs:
         run: |
           pwd
           npm run build
+      - name: Publish JS file name in job output
+        id: publish
+        run: find dist/assets/*.js -type f -execdir echo 'script=file={}' >> $GITHUB_OUTPUT ';'
+        
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
