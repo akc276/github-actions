@@ -38,7 +38,8 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm test
-  deploy-react-app:
+        
+  build-react-app:
     needs: test-react-app
     runs-on: ubuntu-latest
     steps:
@@ -59,7 +60,14 @@ jobs:
           path: |
             dist
             package.json
-      - name: Deploy
+            
+  deploy-react-app:
+    needs: build-react-app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifacts@v5
+      - name: Deploy build
         run: echo "Deploying ..."
         
         
