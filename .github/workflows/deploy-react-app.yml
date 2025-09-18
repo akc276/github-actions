@@ -5,6 +5,9 @@ on:
       - opened
       - reopened
       - edited
+  push:
+    branches:
+      - main
   workflow_dispatch:
 jobs:
   lint-react-app:
@@ -49,6 +52,13 @@ jobs:
         run: npm ci
       - name: Build project
         run: npm run build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path:
+            dist
+            package.json
       - name: Deploy
         run: echo "Deploying ..."
         
