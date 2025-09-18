@@ -67,6 +67,10 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifacts@v5
+        with:
+          name: dist-files
+      - name: Output contents
+        run: ls
       - name: Deploy build
         run: echo "Deploying ..."
         
