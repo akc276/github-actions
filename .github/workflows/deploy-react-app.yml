@@ -52,11 +52,12 @@ jobs:
         with:
           node-version: 18
       - name: Install dependenceis
-        run: npm ci
+        run: |
+          pwd
+          npm ci
       - name: Build project
         run: |
           pwd
-          ls -alsh
           npm run build
       - name: Publish JS file name in job output
         id: publish
@@ -75,17 +76,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
-          name: dist-files=
+          name: dist-files
       - name: Output contents
         run: |
           pwd
           ls -alsh
           du -sh *
-      - name: Output files
-        run: echo "${{ needs.build-react-app.outputs.script-file }}"
       - name: Deploy build
         run: echo "Deploying ..."
-        
-        
