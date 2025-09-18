@@ -70,7 +70,9 @@ jobs:
         with:
           name: dist-files
       - name: Output contents
-        run: ls -alsh
+        run: |
+          ls -alsh
+          du -sh *
       - name: Deploy build
         run: echo "Deploying ..."
         
