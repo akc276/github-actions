@@ -121,7 +121,7 @@ jobs:
     if: failure()
     runs-on: ubuntu-latest
     steps:
-    - name: Output failure information
-      run: |
-        echo "Something went wrong"
-        echo "${{ github }}"
+      - name: Output failure information
+        run: |
+          echo "Something went wrong"
+          echo "${{ github }}"
