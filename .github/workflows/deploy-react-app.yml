@@ -38,7 +38,7 @@ jobs:
         run: npm run lint
       
   test-react-app:
-    needs: lint-react-app
+    # needs: lint-react-app
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -118,6 +118,7 @@ jobs:
       - name: Deploy build
         run: echo "Deploying ..."
   report-failure:
+    needs: [lint-react-app, test-react-app, build-react-app, deploy-react-app]
     if: failure()
     runs-on: ubuntu-latest
     steps:
