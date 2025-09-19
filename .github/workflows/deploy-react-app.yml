@@ -56,6 +56,11 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm test
+      - name: Update Test report
+        uses: upload-artifact@v5
+        with:
+          name: test-report
+          path: test.json
         
   build-react-app:
     needs: test-react-app
