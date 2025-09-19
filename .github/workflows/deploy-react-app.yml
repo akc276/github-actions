@@ -117,3 +117,11 @@ jobs:
         run: echo "${{ needs.build-react-app.outputs.script-file }}"
       - name: Deploy build
         run: echo "Deploying ..."
+  report-failure:
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Output failure information
+      run: |
+        echo "Something went wrong"
+        echo "${{ github }}"
