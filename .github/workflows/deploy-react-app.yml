@@ -9,13 +9,13 @@ on:
     branches:
       - main
   workflow_dispatch:
-environment: testing
 env:
   MONGODB_CLUSTER_ADDRESS: ${{ secrets.MONGODB_CLUSTER_ADDRESS }}
   MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
   MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
 jobs:
   lint-react-app:
+    environment: testing
     runs-on: ubuntu-latest
     steps:
       - name: Read environment variabls 
