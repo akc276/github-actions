@@ -9,10 +9,16 @@ on:
     branches:
       - main
   workflow_dispatch:
+env:
+  MONGODB_CLUSTER_ADDRESS: ${{ secrets.MONGODB_CLUSTER_ADDRESS }}
+  MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+  MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
 jobs:
   lint-react-app:
     runs-on: ubuntu-latest
     steps:
+      - name: Read environment variabls
+        run: echo "MONGODB_CLUSTER_ADDRESS: ${{ env.MONGODB_CLUSTER_ADDRESS }}"
       - name: Get code
         uses: actions/checkout@v5
       # - name: Install NodeJS
