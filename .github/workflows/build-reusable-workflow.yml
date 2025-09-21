@@ -1,0 +1,47 @@
+name: Build reusable workflow
+on:
+    workflow_call:
+        outputs:
+            script-file: 
+                description: JS files created by build job
+                value: ${{ jobs.build-react-app.outputs.script-file}}
+jobs:
+    build-react-app:
+        runs-on: ubuntu-latest
+        outputs:
+            script-file: ${{ steps.publish.outputs.script-file }}
+        steps:
+        -   name: Get code
+            uses: actions/checkout@v5
+        # -   name: Install NodeJS
+        #     uses: actions/setup-node@v5
+        #     with:
+        #         node-version: 18
+        -   name: Cache dependencies
+            uses: actions/cache@v4
+            id: cache
+            with:
+                path: |
+                    ~/.npm
+                    node_modules
+                key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+        -   name: Install dependenceis
+            if: steps.cache.outputs.cache-hit != 'true'
+            run: npm ci
+        -   name: Build project
+            run: |
+                pwd
+                ls -alsh
+                npm run build
+        -   name: Publish JS file name in job output
+            id: publish
+            run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
+            
+        -   name: Upload artifact
+            uses: actions/upload-artifact@v4
+            with:
+                name: dist-files
+                path: |
+                    dist
+                    package.json
+            
