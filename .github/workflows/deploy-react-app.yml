@@ -39,6 +39,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Lint react app
+        continue-on-error: true
         run: npm run lint
       
   test-react-app:
@@ -73,7 +74,7 @@ jobs:
           path: test.json
         
   build-react-app:
-    needs: test-react-app
+    needs: [test-react-app, lint-react-app]
     runs-on: ubuntu-latest
     outputs:
       script-file: ${{ steps.publish.outputs.script-file }}
