@@ -15,6 +15,13 @@ jobs:
       matrix:
         node-version: [12, 14, 16]
         operating-system: [ubuntu-latest, windows-latest]
+        exclude:
+          - node-version: 12
+            operating-system: windows-latest
+        include:
+          - node-version: 18
+            operating-system: ubuntu-latest
+
     runs-on: ${{ matrix.operating-system }}
     continue-on-error: true
     steps:
