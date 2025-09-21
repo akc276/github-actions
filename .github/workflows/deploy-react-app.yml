@@ -115,22 +115,10 @@ jobs:
             
   deploy-react-app:
     needs: build-react-app
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v5
-        with:
-          name: dist-files
-      - name: Output contents
-        run: |
-          pwd
-          ls -alsh
-          du -sh *
-      - name: Output files
-        run: echo "${{ needs.build-react-app.outputs.script-file }}"
-      - name: Deploy Build
-        uses: ./.github/workflows/deploy-reusable-workflow.yml
-        
+    uses: ./.github/workflows/deploy-reusable-workflow.yml
+    with:
+      script-file: ${{ needs.build-react-app.outputs.script-file}}
+
   report-failure:
     needs: [lint-react-app, test-react-app, build-react-app, deploy-react-app]
     if: failure()

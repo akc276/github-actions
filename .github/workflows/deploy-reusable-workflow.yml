@@ -1,13 +1,25 @@
 name: Deploy Reusable workflow
 on:
   workflow_call:
+    inputs: #matrix values, env values, and outputs need to pass as inputs to child workflow
+      script-file:
+        required: true
+        type: string
 jobs:
-  deploy:
+  deploy-react-app:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v5
         with:
           name: dist-files
+      - name: Output information
+        run: |
+          pwd
+          ls -alsh
+          du -sh *
+      - name: Output files
+        run: echo "${{inputs.script-file}}"
+
       - name: Deploy
         run: echo "Deploying ..."
