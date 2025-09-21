@@ -128,8 +128,9 @@ jobs:
           du -sh *
       - name: Output files
         run: echo "${{ needs.build-react-app.outputs.script-file }}"
-      - name: Deploy build
-        run: echo "Deploying ..."
+      - name: Deploy Build
+        uses: ./.github/workflows/deploy-reusable-workflow.yml
+        
   report-failure:
     needs: [lint-react-app, test-react-app, build-react-app, deploy-react-app]
     if: failure()
