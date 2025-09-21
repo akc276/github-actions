@@ -1,0 +1,48 @@
+name: Build job with strategy matrix
+on: 
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  build:
+    strategy:
+      matrix:
+        node-version: [12, 14, 16]
+        operating-system: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.operating-system }}
+    steps:
+      - name: Get code
+        uses: actions/checkout@v5
+      - name: Install NodeJS
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache the node dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: dep-node-module-${{ hashFiles('**/packages-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Run build
+        run: npm run build
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: |
+            dist
+            package.json
+
+  
