@@ -15,7 +15,8 @@ inputs:
     default: 'true'
 outputs:
   cache-hit:
-    description
+    description: Returns true if cache found, false if caching not enabled or cache not found
+    value: ${{steps.publish.cache-hit}}
   
 runs:
   using: 'composite'
@@ -25,7 +26,7 @@ runs:
       uses: actions/checkout@v5
 
     - name: Install NodeJS
-      if: inputs.node-version != "false"
+      if: inputs.node-version != 'false'
       uses: actions/setup-node@v5
       with: 
         node-version: ${{inputs.node-version}}
@@ -46,6 +47,7 @@ runs:
       shell: bash
 
     - name: Publishing cache-hit
+      id: publish
       run: |
         if [ -n "${{ steps.cache.outputs.cache-hit }}" ]; then
           echo "cache-hit=${{ steps.cache.outputs.cache-hit }}" >> $GITHUB_OUTPUT
