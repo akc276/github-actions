@@ -23,6 +23,8 @@ jobs:
           echo "MONGODB_CLUSTER_ADDRESS: ${{ env.MONGODB_CLUSTER_ADDRESS }}"
       - name: Get code
         uses: actions/checkout@v5
+      - name: check the files inside repository
+        run: find . | sort
       - name: setup node environment
         uses: ./.github/actions/node-env-setup
       - name: Lint react app
