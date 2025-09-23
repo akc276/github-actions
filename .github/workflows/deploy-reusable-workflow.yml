@@ -6,24 +6,47 @@ on:
         required: false
         type: string
         default: dist-files
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
 jobs:
   deploy-react-app:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-        
+
       - name: Download artifacts
         uses: actions/download-artifact@v5
         with:
           name: dist-files
+          path: ./dist
       - name: Output information
         run: |
           pwd
           ls -alsh
           du -sh *
       - name: Output files
-        run: echo "${{inputs.script-file}}"
+        continue-on-error: true
+        run: |
+          echo "${{inputs.script-file}}"
+          echo "secrets: ${{toJSON(secrets)}}
+          echo "secrets.AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}}"
+          echo "secrets.AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}}"
 
       - name: Deploy
+        id: deploy
         uses: ./.github/actions/deploy-on-aws
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+        with:
+          bucket: gha-custom-action-hosting-akc276
+          dist-folder: ./dist
+          bucket-region: ap-south-1
+      
+      - name: Website link
+        run: |
+          echo "Live URL: ${{steps.deploy.outputs.website-url}}

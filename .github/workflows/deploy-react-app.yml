@@ -63,14 +63,17 @@ jobs:
           path: test.json
         
   build-react-app:
-    needs: [test-react-app, lint-react-app]
+    # needs: [test-react-app, lint-react-app]
     uses: ./.github/workflows/build-reusable-workflow.yml
             
   deploy-react-app:
-    needs: build-react-app
+    needs: [build-react-app, lint-react-app, test-react-app]
     uses: ./.github/workflows/deploy-reusable-workflow.yml
     with:
       script-file: ${{ needs.build-react-app.outputs.script-file}}
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
   report-failure:
     needs: [lint-react-app, test-react-app, build-react-app, deploy-react-app]
