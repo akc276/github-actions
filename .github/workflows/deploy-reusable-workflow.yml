@@ -3,12 +3,16 @@ on:
   workflow_call:
     inputs: #matrix values, env values, and outputs need to pass as inputs to child workflow
       script-file:
-        required: true
+        required: false
         type: string
+        default: dist-files
 jobs:
   deploy-react-app:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        
       - name: Download artifacts
         uses: actions/download-artifact@v5
         with:
@@ -22,4 +26,4 @@ jobs:
         run: echo "${{inputs.script-file}}"
 
       - name: Deploy
-        run: echo "Deploying ..."
+        uses: ./.github/actions/deploy-on-aws
