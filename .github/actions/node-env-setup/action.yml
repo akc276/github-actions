@@ -1,0 +1,55 @@
+name: Environment setup for node
+description: installs node, installs dependencies using npm ci, if any changes made to any package-lock.json files, otherwise uses the dependencies from
+inputs:
+  get-code:
+    description: "Asks if need to get code from current repository"
+    required: false
+    default: 'false'
+  node-version: 
+    description: "Node version, skips if false"
+    required: false
+    default: 18
+  caching:
+    description: 'Whether to use cache dependencies or not.'
+    required: false
+    default: 'true'
+outputs:
+  cache-hit:
+    description
+  
+runs:
+  using: 'composite'
+  steps:
+    - name: Get code
+      if: inputs.get-code == 'true'
+      uses: actions/checkout@v5
+
+    - name: Install NodeJS
+      if: inputs.node-version != "false"
+      uses: actions/setup-node@v5
+      with: 
+        node-version: ${{inputs.node-version}}
+
+    - name: Cache despendencies
+      if: inputs.caching == 'true'
+      uses: actions/cache@v4
+      id: cache
+      with:
+        path: |
+          ~/.npm
+          node_modules
+        key: deps-node-modules-${{ hashfiles('**/package-lock.json') }}
+
+    - name: Install dependencies
+      if: inputs.caching != 'true' || steps.cache.outputs.cache-hit != 'true'
+      run: npm ci
+      shell: bash
+
+    - name: Publishing cache-hit
+      run: |
+        if [ -n "${{ steps.cache.outputs.cache-hit }}" ]; then
+          echo "cache-hit=${{ steps.cache.outputs.cache-hit }}" >> $GITHUB_OUTPUT
+        else
+          echo "cache-hit=false" >> $GITHUB_OUTPUT
+        fi
+      shell: bash

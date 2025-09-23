@@ -18,26 +18,13 @@ jobs:
     environment: testing
     runs-on: ubuntu-latest
     steps:
-      - name: Read environment variabls 
+      - name: Read environment variables 
         run: |
           echo "MONGODB_CLUSTER_ADDRESS: ${{ env.MONGODB_CLUSTER_ADDRESS }}"
       - name: Get code
         uses: actions/checkout@v5
-      # - name: Install NodeJS
-      #   uses: actions/setup-node@v5
-      #   with:
-      #     node-version: 18
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        id: cache
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: deps-node-modules-${{ hashfiles('**/package-lock.json')  }}
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+      - name: setup node environment
+        uses: ./.github/actions/node-env-setup
       - name: Lint react app
         continue-on-error: true
         run: npm run lint
