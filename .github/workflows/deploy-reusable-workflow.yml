@@ -44,7 +44,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
         with:
           bucket: gha-custom-action-hosting-akc276
-          dist-folder: ./dist
+          dist-folder: ./dist/dist
           bucket-region: ap-south-1
       
       - name: Website link
