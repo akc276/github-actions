@@ -35,6 +35,13 @@ runs:
       run: ls -R
       shell: bash
 
+    - name: Create hash key for package-lock.json
+      id: hash
+      run: |
+        HASH=$(find . -name "package-lock.json" -exec cat {} + | shasum -a 256)
+        echo "hash=$HASH" >> $GITHUB_OUTPUT
+      shell: bash
+
     - name: Cache despendencies
       if: inputs.caching == 'true'
       uses: actions/cache@v4
@@ -43,7 +50,7 @@ runs:
         path: |
           ~/.npm
           node_modules
-        key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+        key: deps-node-modules-${{ steps.hash.outputs.HASH }}
 
     - name: Install dependencies
       if: inputs.caching != 'true' || steps.cache.outputs.cache-hit != 'true'
