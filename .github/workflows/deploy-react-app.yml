@@ -67,8 +67,11 @@ jobs:
     uses: ./.github/workflows/build-reusable-workflow.yml
             
   deploy-react-app:
+    permissions:
+      id-token: write
+      contents: read
     needs: [build-react-app, lint-react-app, test-react-app]
-    uses: ./.github/workflows/deploy-reusable-workflow.yml
+    uses: akc276/github-actions/.github/workflows/deploy-reusable-workflow.yml@main
     with:
       script-file: ${{ needs.build-react-app.outputs.script-file}}
     secrets:

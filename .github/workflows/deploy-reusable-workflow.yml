@@ -13,6 +13,9 @@ on:
         required: true
 jobs:
   deploy-react-app:
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,13 +38,17 @@ jobs:
           echo "secrets: ${{toJSON(secrets)}}
           echo "secrets.AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}}"
           echo "secrets.AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}}"
+      
+      - name: Get AWS permissions
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::754973505483:role/Github_S3_full_access
+          aws-region: ap-south-1
 
       - name: Deploy
         id: deploy
+
         uses: ./.github/actions/deploy-on-aws
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
         with:
           bucket: gha-custom-action-hosting-akc276
           dist-folder: ./dist/dist
@@ -49,4 +56,4 @@ jobs:
       
       - name: Website link
         run: |
-          echo "Live URL: ${{steps.deploy.outputs.website-url}}
+          echo "Live URL: ${{steps.deploy.outputs.website-url}}"

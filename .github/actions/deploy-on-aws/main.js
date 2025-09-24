@@ -40,11 +40,11 @@ function run() {
         }
     }
 
-    exec.exec(`aws s3 sync ${distFolder} ${BUCKET_URI} --region ${bucketRegion} --delete --acl public-read`)
+    exec.exec(`aws s3 sync ${distFolder} ${BUCKET_URI} --region ${bucketRegion} --delete`)
     // execute_aws_s3_cmd(`sync ${distFolder} --delete`);
     execute_aws_s3_cmd('ls')
     // execute_aws_s3_cmd(`website --index-document index.html --error-document index.html`)
-    const websiteURL = `https://${bucket}.s3-website-${bucketRegion}.amazonaws.com`;
+    const websiteURL = `http://${bucket}.s3-website.${bucketRegion}.amazonaws.com`;
     core.setOutput('website-url', websiteURL)
     core.notice(`Website URL: ${websiteURL}`);
 }
