@@ -6,11 +6,6 @@ on:
         required: false
         type: string
         default: dist-files
-    secrets:
-      AWS_ACCESS_KEY_ID:
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
 jobs:
   deploy-react-app:
     permissions:
@@ -18,9 +13,6 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
       - name: Download artifacts
         uses: actions/download-artifact@v5
         with:
@@ -36,8 +28,6 @@ jobs:
         run: |
           echo "${{inputs.script-file}}"
           echo "secrets: ${{toJSON(secrets)}}
-          echo "secrets.AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}}"
-          echo "secrets.AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}}"
       
       - name: Get AWS permissions
         uses: aws-actions/configure-aws-credentials@v5
@@ -48,7 +38,8 @@ jobs:
       - name: Deploy
         id: deploy
 
-        uses: ./.github/actions/deploy-on-aws
+        # uses: akc276/github-actions/.github/actions/deploy-on-aws-js@main
+        uses: akc276/github-actions/.github/actions/deploy-on-aws-js@main
         with:
           bucket: gha-custom-action-hosting-akc276
           dist-folder: ./dist/dist

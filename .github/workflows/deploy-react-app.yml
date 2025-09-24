@@ -67,16 +67,13 @@ jobs:
     uses: ./.github/workflows/build-reusable-workflow.yml
             
   deploy-react-app:
-    permissions:
-      id-token: write
-      contents: read
     needs: [build-react-app, lint-react-app, test-react-app]
     uses: akc276/github-actions/.github/workflows/deploy-reusable-workflow.yml@main
     with:
       script-file: ${{ needs.build-react-app.outputs.script-file}}
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
-      AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+    permissions:
+      id-token: write
+      contents: read
 
   report-failure:
     needs: [lint-react-app, test-react-app, build-react-app, deploy-react-app]
