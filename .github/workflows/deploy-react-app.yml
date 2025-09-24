@@ -37,21 +37,8 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v5
-      # - name: Install NodeJS
-      #   uses: actions/setup-node@v5
-      #   with: 
-      #     node-version: 18
-      - name: Cache despendencies
-        uses: actions/cache@v4
-        id: cache
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: deps-node-modules-${{ hashfiles('**/package-lock.json') }}
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+      - name: setup node environment
+        uses: ./.github/actions/node-env-setup
       - name: Run tests
         id: run-tests
         run: npm test

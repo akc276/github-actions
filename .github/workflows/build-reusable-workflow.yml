@@ -13,21 +13,9 @@ jobs:
         steps:
         -   name: Get code
             uses: actions/checkout@v5
-        # -   name: Install NodeJS
-        #     uses: actions/setup-node@v5
-        #     with:
-        #         node-version: 18
-        -   name: Cache dependencies
-            uses: actions/cache@v4
-            id: cache
-            with:
-                path: |
-                    ~/.npm
-                    node_modules
-                key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-        -   name: Install dependenceis
-            if: steps.cache.outputs.cache-hit != 'true'
-            run: npm ci
+        -   name: setup node environment
+            uses: ./.github/actions/node-env-setup
+            
         -   name: Build project
             run: |
                 pwd

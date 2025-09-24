@@ -31,6 +31,10 @@ runs:
       with: 
         node-version: ${{inputs.node-version}}
 
+    - name: Debug files
+      run: ls -R
+      shell: bash
+
     - name: Cache despendencies
       if: inputs.caching == 'true'
       uses: actions/cache@v4
@@ -39,7 +43,7 @@ runs:
         path: |
           ~/.npm
           node_modules
-        key: deps-node-modules-${{ hashfiles('**/package-lock.json') }}
+        key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install dependencies
       if: inputs.caching != 'true' || steps.cache.outputs.cache-hit != 'true'
