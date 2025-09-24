@@ -12,7 +12,7 @@ inputs:
   caching:
     description: 'Whether to use cache dependencies or not.'
     required: false
-    default: 'true'
+    default: 'false'
 outputs:
   cache-hit:
     description: Returns true if cache found, false if caching not enabled or cache not found
