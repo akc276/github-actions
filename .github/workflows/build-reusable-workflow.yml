@@ -7,7 +7,7 @@ on:
                 value: ${{ jobs.build-react-app.outputs.script-file}}
 jobs:
     build-react-app:
-        runs-on: ubuntu-latest
+        runs-on: self-hosted
         outputs:
             script-file: ${{ steps.publish.outputs.script-file }}
         steps:

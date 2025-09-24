@@ -16,7 +16,7 @@ env:
 jobs:
   lint-react-app:
     environment: testing
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Read environment variables 
         run: |
@@ -33,7 +33,7 @@ jobs:
       
   test-react-app:
     # needs: lint-react-app
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Get code
         uses: actions/checkout@v5
@@ -78,7 +78,7 @@ jobs:
   report-failure:
     needs: [lint-react-app, test-react-app, build-react-app, deploy-react-app]
     if: failure()
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Output failure information
         run: |
